@@ -1,0 +1,11 @@
+.BaseContainer {
+  padding: 2% 5%;
+  width: 100%;
+  /* min-height: 85vh; */
+  padding-bottom: 60px;   /* Make sure space is reserved for the footer */
+
+  @media (max-width: 800px) {
+    padding: 2% 5%;
+  }
+}
+
