@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Collapse, List, ListItem } from "@mui/material";
+import { Button, Container, Typography, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Collapse, List, ListItem } from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const CourseListComponent = () => {
     const [courses, setCourses] = useState([]);
@@ -10,6 +12,8 @@ const CourseListComponent = () => {
     const [expandedAttendees, setExpandedAttendees] = useState({});
     const [attendeeNames, setAttendeeNames] = useState({});
     const [sortBy, setSortBy] = useState("start_date");
+    const navigate = useNavigate();
+    
 
     useEffect(() => {
       fetchCourses();
@@ -58,6 +62,9 @@ const CourseListComponent = () => {
         <Typography variant="h4" textAlign="center" gutterBottom>
           Course List
         </Typography>
+        <Button variant="contained" onClick={(e) => {navigate(`/courses/add`);}} fullWidth sx={{ mb: 2 }}>
+          Add Course
+        </Button>
         <TextField
           label="Search Courses"
           variant="outlined"

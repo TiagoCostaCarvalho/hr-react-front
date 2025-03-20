@@ -37,25 +37,43 @@ const EmployeeHierarchy = () => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleExpandAll = () => {
+  const handleExpandAll = (doOpen) => {
     const newExpandState = {};
     const setAllExpanded = (employees) => {
       employees.forEach(emp => {
-        newExpandState[emp.id] = !expandAll;
+        newExpandState[emp.id] = doOpen;
         if (emp.reporter_employees.length > 0) setAllExpanded(emp.reporter_employees);
       });
     };
     setAllExpanded(hierarchy);
     setExpanded(newExpandState);
-    setExpandAll(!expandAll);
+    setExpandAll(doOpen);
+  };
+
+  const handleExpandRoles = (maxRoleId) => {
+    const newExpandState = {};
+    const setRoleExpanded = (employees) => {
+      employees.forEach(emp => {
+        if (emp.role <= maxRoleId) {
+          newExpandState[emp.id] = true;
+        }
+        if (emp.reporter_employees.length > 0) setRoleExpanded(emp.reporter_employees);
+      });
+    };
+    setRoleExpanded(hierarchy);
+    setExpanded(newExpandState);
   };
 
   const handleViewEmployee = (id) => {
     navigate(`/employees/${id}`);
   };
 
+  const handleAddEmployee = () => {
+    navigate(`/employees/add`);
+  };
+
   const renderHierarchy = (employees, depth = 0) => (
-    <List sx={{ marginLeft: depth > 0 ? 2 : 0, borderLeft: depth > 0 ? "1px solid lightgrey" : "none", paddingLeft: 1 }}>
+    <List sx={{ marginLeft: depth > 0 ? 2 : 0, borderLeft: depth > 0 ? "1px solid lightgrey" : "none", paddingLeft: 1, backgroundColor: "#f5f5f5" }}>
       {employees.map((employee) => (
         <div key={employee.id}>
           <ListItem
@@ -64,7 +82,6 @@ const EmployeeHierarchy = () => {
             sx={{
               borderLeft: `5px solid ${roles[employee.role]?.color || "#000"}`,
               paddingLeft: "8px",
-              display: "flex",
               justifyContent: "space-between",
               alignItems: "center"
             }}
@@ -92,8 +109,23 @@ const EmployeeHierarchy = () => {
       <Typography variant="h4" textAlign="center" gutterBottom>
         Employee Hierarchy
       </Typography>
-      <Button variant="contained" onClick={handleExpandAll} fullWidth>
-        {expandAll ? "Collapse All" : "Expand All"}
+      <Button variant="contained" onClick={handleAddEmployee} fullWidth sx={{ mb: 2 }}>
+        Add Employee
+      </Button>
+      <Button variant="contained" onClick={(e) => handleExpandAll(true)} style={{width: "40%", margin: "5%"}} sx={{ mb: 1 }}>
+        Expand All
+      </Button>
+      <Button variant="contained" onClick={(e) => handleExpandAll(false)} style={{width: "40%", margin: "5%"}} sx={{ mb: 1 }}>
+        Colapse All
+      </Button>
+      <Button variant="contained" onClick={() => handleExpandRoles(1)} style={{width: "29%", minHeight: "65px", margin: "2%"}} sx={{ mb: 1 }}>
+        Expand GMs
+      </Button>
+      <Button variant="contained" onClick={() => handleExpandRoles(2)} style={{width: "29%", minHeight: "65px", margin: "2%"}} sx={{ mb: 1 }}>
+        Expand Directors
+      </Button>
+      <Button variant="contained" onClick={() => handleExpandRoles(3)} style={{width: "29%", minHeight: "65px", margin: "2%"}} sx={{ mb: 1 }}>
+        Expand Team Leaders
       </Button>
       {renderHierarchy(hierarchy)}
     </Container>

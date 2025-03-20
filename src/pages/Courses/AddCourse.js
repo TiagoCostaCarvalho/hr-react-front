@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import BaseContainer from "../../components/BaseContainer/BaseContainer";
+import Swal from "sweetalert2";
 
 const AddCourse = () => {
   const navigate = useNavigate();
@@ -33,8 +34,28 @@ const AddCourse = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post(`${process.env.REACT_APP_API_URL}courses/`, formData)
-      .then(() => navigate("/courses"))
-      .catch(error => console.error("Error creating course:", error));
+      .then(() => {
+        Swal.fire({
+            title: "Success!",
+            text: `Course created successfully!`,
+            icon: "success",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate("/courses");
+            }
+        });
+    })
+    .catch(error => {
+        console.log({error});
+        Swal.fire({
+            title: "Error!",
+            text: error.response.data.non_field_errors[0],
+            icon: "error",
+            confirmButtonText: "OK"
+        });
+        console.error("Error saving course:", error);
+    });
   };
 
   return (
@@ -49,7 +70,7 @@ const AddCourse = () => {
             <TextField label="Course Title" name="title" value={formData.title} onChange={handleChange} required />
             <TextField label="Start Date" name="start_date" type="date" InputLabelProps={{ shrink: true }} value={formData.start_date} onChange={handleChange} required />
             <TextField label="End Date" name="end_date" type="date" InputLabelProps={{ shrink: true }} value={formData.end_date} onChange={handleChange} required />
-            <TextField select label="Attendees" name="attendees" value={formData.attendees} onChange={handleAttendeeChange} SelectProps={{ multiple: true }} required>
+            <TextField select label="Attendees" name="attendees" value={formData.attendees} onChange={handleAttendeeChange} SelectProps={{ multiple: true, max: 5 }} required>
               {employees.map((employee) => (
                 <MenuItem key={employee.id} value={employee.id}>
                   {employee.first_name} {employee.last_name}

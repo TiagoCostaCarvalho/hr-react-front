@@ -10,16 +10,25 @@ const HomePage = () => {
       <Header />
       <BaseContainer>
         <main className="flex-grow flex flex-col items-center justify-center text-center">
-          <h1 className="text-6xl font-bold">HR Application Exercise</h1>
-          <h2 className="text-6xl font-bold">Main pages:</h2>
+          <h1 className="font-bold">HR Application Exercise</h1>
+          <h2 className="font-bold">Main Pages:</h2>
+          <ul>
+            <li>
+              <a href="/courses" style={{textDecoration: "none", color: "blue"}}>Courses</a>
+            </li>
+            <li>
+              <a href="/employees/hierarchy" style={{textDecoration: "none", color: "blue"}}>Employees</a>
+            </li>
+          </ul>
+          <h2 className="font-bold">Directly Acess:</h2>
           <ul>
             {urlPaths.filter((item) => item.showOnHome).map((item) => (
               <li key={item.path}>
-                <a href={item.path}>{item.title}</a>
+                <a href={item.path} style={{textDecoration: "none", color: "blue"}}>{item.title}</a>
               </li>
             ))}
           </ul>
-          <p className="text-9xl mt-4">:)</p>
+          <p className="text-9xl mt-4" style={{fontSize: "50px"}}>:)</p>
         </main>
       </BaseContainer>
       <Footer />
