@@ -97,7 +97,9 @@ const EmployeeDetailComponent = ({ mode }) => {
         if (indexToRemove !== -1) {
             reports_to.splice(indexToRemove, 1);
         }
-        reports_to.push(employee.manager);
+        if (employee.manager) {
+            reports_to.push(employee.manager);
+        }
         if(employee.director_manager != "") {
             reports_to.push(employee.director_manager);
         }
